@@ -1,6 +1,7 @@
 package main
 
 import (
+	"go-chat-room/internal/db"
 	"log"
 	"net/http"
 
@@ -51,6 +52,18 @@ func main() {
 
 	// Define a webSocket
 	router.GET("/ws", wsHandler)
+
+	// Init DB
+	dsn := "host=localhost user=postgres password=secret dbname=go-chat-rooms port=5432 sslmode=disable"
+
+	_, err := db.InitDB(dsn)
+	if err != nil {
+		log.Fatal("Error initializing database:", err)
+	}
+	// defer db.DB.Close()
+
+	// Migrate DB schemas
+	db.MigrateDB()
 
 	// Start the server
 	port := ":8080"
