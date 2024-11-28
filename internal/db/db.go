@@ -2,6 +2,7 @@ package db
 
 import (
 	"fmt"
+	"go-chat-room/internal/db/model"
 	"log"
 
 	"gorm.io/driver/postgres"
@@ -22,17 +23,13 @@ func InitDB(dsn string) (*gorm.DB, error) {
 	return DB, nil
 }
 
-// Message model for GORM
-type Message struct {
-	ID      uint   `gorm:"primaryKey"`
-	Content string `gorm:"type:text"`
-	UserID  uint   `gorm:"not null"`
-	RoomID  uint   `gorm:"not null"`
-}
-
 func MigrateDB() {
 	// Automatically migrate the schema (create tables)
-	err := DB.AutoMigrate(&Message{})
+	err := DB.AutoMigrate(
+		&model.User{},
+		&model.ChatRoom{},
+		&model.Message{},
+	)
 	if err != nil {
 		log.Fatalf("Falied to migrate database: %v", err)
 
