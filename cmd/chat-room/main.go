@@ -1,6 +1,7 @@
 package main
 
 import (
+	"go-chat-room/internal/api/handler"
 	"go-chat-room/internal/db"
 	"log"
 	"net/http"
@@ -52,6 +53,7 @@ func main() {
 
 	// Define a webSocket
 	router.GET("/ws", wsHandler)
+	router.POST("/users", handler.CreateUserHandler)
 
 	// Init DB
 	dsn := "host=localhost user=postgres password=secret dbname=go-chat-rooms port=5432 sslmode=disable"

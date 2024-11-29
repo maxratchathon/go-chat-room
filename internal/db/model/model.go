@@ -10,11 +10,11 @@ type Message struct {
 
 // Users
 type User struct {
-	ID           uint       `gorm:"primaryKey"`
-	Email        string     `gorm:"unique;not null"`
-	HashPassword string     `gorm:"not null"`
-	ChatRooms    []ChatRoom `gorm:"foreignKey:CreatedBy"`
-	Messages     []Message  `gorm:"foreignKey:SenderID"`
+	ID        uint       `gorm:"primaryKey"`
+	Username  string     `gorm:"unique;not null"`
+	Password  string     `gorm:"not null"`
+	ChatRooms []ChatRoom `gorm:"foreignKey:CreatedBy"`
+	Messages  []Message  `gorm:"foreignKey:SenderID"`
 }
 
 type ChatRoom struct {
