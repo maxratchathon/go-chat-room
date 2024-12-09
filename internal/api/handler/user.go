@@ -69,3 +69,47 @@ func GetUsersByIdHandler(c *gin.Context) {
 
 	c.JSON(http.StatusOK, users)
 }
+
+// Update unique Users
+func UpdateUserById(c *gin.Context) {
+	// Parse and validate input
+	var input struct {
+		Username string `json:"username" binding:"required"`
+		Password string `json:"password" `
+	}
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
+		return
+	}
+	var users model.User
+
+	// user := model.User{
+	// 	Username: input.Username,
+	// 	Password: input.Password,
+	// }
+
+	id := c.Param("id")
+	db.DB.First(&users, id)
+
+	// 2: Hash the password
+	if input.Password != "" {
+		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(input.Password), bcrypt.DefaultCost)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "error hashing password"})
+			return
+		}
+		// Update the user variable data
+		users.Password = string(hashedPassword)
+	}
+	users.Username = input.Username
+
+	// Save updated data
+	result := db.DB.Save(&users)
+
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, users)
+}
