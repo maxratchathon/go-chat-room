@@ -51,9 +51,11 @@ func main() {
 	// Initialize Gin router
 	router := gin.Default()
 
-	// Define a webSocket
+	// Define a api routes
 	router.GET("/ws", wsHandler)
 	router.POST("/users", handler.CreateUserHandler)
+	router.GET("/users", handler.GetUsersHandler)
+	router.GET("/users/:userId", handler.GetUsersByIdHandler)
 
 	// Init DB
 	dsn := "host=localhost user=postgres password=secret dbname=go-chat-rooms port=5432 sslmode=disable"

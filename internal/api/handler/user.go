@@ -41,3 +41,31 @@ func CreateUserHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "User created successfully", "user": gin.H{"id": user.ID, "username": user.Username}})
 
 }
+
+// GET Users
+func GetUsersHandler(c *gin.Context) {
+
+	var users []model.User
+	result := db.DB.Find(&users)
+
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, users) // Return the actual data
+}
+
+// GET unique Users
+func GetUsersByIdHandler(c *gin.Context) {
+	var users []model.User
+	id := c.Param("id")
+	result := db.DB.First(&users, id)
+
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, users)
+}
