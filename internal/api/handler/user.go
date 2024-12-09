@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"go-chat-room/internal/db"
 	"go-chat-room/internal/db/model"
 	"net/http"
@@ -71,7 +72,7 @@ func GetUsersByIdHandler(c *gin.Context) {
 }
 
 // Update unique Users
-func UpdateUserById(c *gin.Context) {
+func UpdateUserByIdHandler(c *gin.Context) {
 	// Parse and validate input
 	var input struct {
 		Username string `json:"username" binding:"required"`
@@ -112,4 +113,19 @@ func UpdateUserById(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, users)
+}
+
+// DELETE User by Id
+func DeleteUserByIdHandler(c *gin.Context) {
+	var users model.User
+	id := c.Param("id")
+	db.DB.First(&users, id)
+	result := db.DB.Delete(&users)
+
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, fmt.Sprintf("the user %d has been deleted successfully.", users.Username))
 }
