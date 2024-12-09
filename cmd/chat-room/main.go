@@ -55,9 +55,9 @@ func main() {
 	router.GET("/ws", wsHandler)
 	router.POST("/users", handler.CreateUserHandler)
 	router.GET("/users", handler.GetUsersHandler)
-	router.GET("/users/:userId", handler.GetUsersByIdHandler)
-	router.PATCH("/users/:userId", handler.UpdateUserByIdHandler)
-	router.DELETE("/users/:userId", handler.DeleteUserByIdHandler)
+	router.GET("/users/:id", handler.GetUsersByIdHandler)
+	router.PATCH("/users/:id", handler.UpdateUserByIdHandler)
+	router.DELETE("/users/:id", handler.DeleteUserByIdHandler)
 
 	// Init DB
 	dsn := "host=localhost user=postgres password=secret dbname=go-chat-rooms port=5432 sslmode=disable"

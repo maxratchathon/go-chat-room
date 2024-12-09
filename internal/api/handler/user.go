@@ -61,7 +61,8 @@ func GetUsersHandler(c *gin.Context) {
 func GetUsersByIdHandler(c *gin.Context) {
 	var users []model.User
 	id := c.Param("id")
-	result := db.DB.First(&users, id)
+	result := db.DB.First(&users, "id=?", id)
+	fmt.Printf("id are %s", id)
 
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
@@ -127,5 +128,5 @@ func DeleteUserByIdHandler(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, fmt.Sprintf("the user %d has been deleted successfully.", users.Username))
+	c.JSON(http.StatusOK, fmt.Sprintf("the user %s has been deleted successfully.", users.Username))
 }
