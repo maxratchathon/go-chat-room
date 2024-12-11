@@ -34,7 +34,7 @@ func CreateChatRoomHandler(c *gin.Context) {
 
 }
 
-// GET Users
+// GET Chatroom
 func GetChatRoomHandler(c *gin.Context) {
 
 	var chatRoom []model.ChatRoom
@@ -46,4 +46,33 @@ func GetChatRoomHandler(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, chatRoom) // Return the actual data
+}
+
+// UPDATE Chatroom [name, createdBy]
+func UpdateChatRoomHandler(c *gin.Context) {
+	var input struct {
+		Name      string `json:"name" binding:"required"`
+		CreatedBy uint   `json:"createdBy" binding:"required"`
+	}
+
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
+		return
+	}
+	var chatRoom model.ChatRoom
+
+	id := c.Param("id")
+	db.DB.First(&chatRoom, id)
+
+	chatRoom.Name = input.Name
+	chatRoom.CreatedBy = input.CreatedBy
+
+	result := db.DB.Save(&chatRoom)
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"name": chatRoom.Name, "createdBy": chatRoom.CreatedBy})
+
 }

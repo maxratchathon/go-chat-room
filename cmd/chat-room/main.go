@@ -64,6 +64,8 @@ func main() {
 	// chatroom api
 	router.POST("/chat-rooms", handler.CreateChatRoomHandler)
 	router.GET("/chat-rooms", handler.GetChatRoomHandler)
+	router.PATCH("/chat-rooms/:id", handler.UpdateChatRoomHandler)
+	// router.DELETE("/chat-rooms/:id", handler.DeleteChatRoomHandler)
 
 	// Init DB
 	dsn := "host=localhost user=postgres password=secret dbname=go-chat-rooms port=5432 sslmode=disable"
