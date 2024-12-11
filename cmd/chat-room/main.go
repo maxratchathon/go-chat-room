@@ -54,18 +54,21 @@ func main() {
 	// Define a api routes
 	router.GET("/ws", wsHandler)
 
-	// users api
+	// users CRUD api
 	router.GET("/users", handler.GetUsersHandler)
 	router.GET("/users/:id", handler.GetUsersByIdHandler)
 	router.POST("/users", handler.CreateUserHandler)
 	router.PATCH("/users/:id", handler.UpdateUserByIdHandler)
 	router.DELETE("/users/:id", handler.DeleteUserByIdHandler)
 
-	// chatroom api
+	// chatroom CRUD api
 	router.POST("/chat-rooms", handler.CreateChatRoomHandler)
 	router.GET("/chat-rooms", handler.GetChatRoomHandler)
 	router.PATCH("/chat-rooms/:id", handler.UpdateChatRoomHandler)
-	// router.DELETE("/chat-rooms/:id", handler.DeleteChatRoomHandler)
+	router.DELETE("/chat-rooms/:id", handler.DeleteChatRoomHandler)
+
+	// Message CRUD api
+	router.POST("/messages", handler.CreateMessageHandler)
 
 	// Init DB
 	dsn := "host=localhost user=postgres password=secret dbname=go-chat-rooms port=5432 sslmode=disable"

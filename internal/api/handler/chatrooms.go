@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"go-chat-room/internal/db"
 	"go-chat-room/internal/db/model"
 	"net/http"
@@ -75,4 +76,19 @@ func UpdateChatRoomHandler(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"name": chatRoom.Name, "createdBy": chatRoom.CreatedBy})
 
+}
+
+// DELETE User by Id
+func DeleteChatRoomHandler(c *gin.Context) {
+	var chatRoom model.ChatRoom
+	id := c.Param("id")
+	db.DB.First(&chatRoom, id)
+	result := db.DB.Delete(&chatRoom)
+
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, fmt.Sprintf("the chatroom %s has been deleted successfully.", chatRoom.Name))
 }
