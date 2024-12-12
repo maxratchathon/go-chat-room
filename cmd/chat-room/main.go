@@ -69,6 +69,7 @@ func main() {
 
 	// Message CRUD api
 	router.POST("/messages", handler.CreateMessageHandler)
+	router.GET("/messages", handler.GetMessageHandler)
 
 	// Init DB
 	dsn := "host=localhost user=postgres password=secret dbname=go-chat-rooms port=5432 sslmode=disable"
