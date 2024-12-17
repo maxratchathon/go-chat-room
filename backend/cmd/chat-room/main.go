@@ -3,6 +3,7 @@ package main
 import (
 	"go-chat-room/internal/api/handler"
 	"go-chat-room/internal/db"
+	"go-chat-room/internal/controllers"
 	"log"
 	"net/http"
 
@@ -51,25 +52,27 @@ func main() {
 	// Initialize Gin router
 	router := gin.Default()
 
+	protected := router.Group("/", controllers.AuthorizationMiddleware)
+
 	// Define a api routes
 	router.GET("/ws", wsHandler)
 
 	// users CRUD api
-	router.GET("/users", handler.GetUsersHandler)
-	router.GET("/users/:id", handler.GetUsersByIdHandler)
-	router.POST("/users", handler.CreateUserHandler)
-	router.PATCH("/users/:id", handler.UpdateUserByIdHandler)
-	router.DELETE("/users/:id", handler.DeleteUserByIdHandler)
+	protected.GET("/users", handler.GetUsersHandler)
+	protected.GET("/users/:id", handler.GetUsersByIdHandler)
+	protected.POST("/users", handler.CreateUserHandler)
+	protected.PATCH("/users/:id", handler.UpdateUserByIdHandler)
+	protected.DELETE("/users/:id", handler.DeleteUserByIdHandler)
 
 	// chatroom CRUD api
-	router.POST("/chat-rooms", handler.CreateChatRoomHandler)
-	router.GET("/chat-rooms", handler.GetChatRoomHandler)
-	router.PATCH("/chat-rooms/:id", handler.UpdateChatRoomHandler)
-	router.DELETE("/chat-rooms/:id", handler.DeleteChatRoomHandler)
+	protected.POST("/chat-rooms", handler.CreateChatRoomHandler)
+	protected.GET("/chat-rooms", handler.GetChatRoomHandler)
+	protected.PATCH("/chat-rooms/:id", handler.UpdateChatRoomHandler)
+	protected.DELETE("/chat-rooms/:id", handler.DeleteChatRoomHandler)
 
 	// Message CRUD api
-	router.POST("/messages", handler.CreateMessageHandler)
-	router.GET("/messages", handler.GetMessageHandler)
+	protected.POST("/messages", handler.CreateMessageHandler)
+	protected.GET("/messages", handler.GetMessageHandler)
 
 	// Init DB
 	dsn := "host=localhost user=postgres password=secret dbname=go-chat-rooms port=5432 sslmode=disable"

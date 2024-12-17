@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"strings"
 
@@ -20,10 +21,12 @@ func CheckHashedPassword(password, hash string) bool {
 }
 
 func ValidateToken(token string) error {
-	if token != "ACCESS_TOKEN" {
+
+	if token != " ACCESS_TOKEN" {
+		log.Printf("aceess token was invalid")
 		return fmt.Errorf("token provided was invalid")
 	}
-
+	log.Println("returning nil")
 	return nil
 }
 
@@ -31,6 +34,7 @@ func AuthorizationMiddleware(c *gin.Context) {
 	s := c.Request.Header.Get("Authorization")
 
 	token := strings.TrimPrefix(s, "Bearer")
+	log.Println("validating token:", token)
 	if err := ValidateToken(token); err != nil {
 		c.AbortWithStatus(http.StatusUnauthorized)
 		return
