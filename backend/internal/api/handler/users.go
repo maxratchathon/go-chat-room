@@ -22,6 +22,13 @@ func CreateUserHandler(c *gin.Context) {
 		return
 	}
 
+	// Check if user aready exist 
+	var existingUser model.User
+	if err := db.DB.Where("username = ?", input.Username).First(&existingUser).Error; err == nil {
+		c.JSON(http.StatusConflict, gin.H{"error": "Username aready registered"})
+		return 
+	}
+
 	// 2: Hash the password
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(input.Password), bcrypt.DefaultCost)
 	if err != nil {

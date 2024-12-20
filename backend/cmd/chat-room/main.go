@@ -2,8 +2,8 @@ package main
 
 import (
 	"go-chat-room/internal/api/handler"
-	"go-chat-room/internal/db"
 	"go-chat-room/internal/controllers"
+	"go-chat-room/internal/db"
 	"log"
 	"net/http"
 
@@ -56,6 +56,9 @@ func main() {
 
 	// Define a api routes
 	router.GET("/ws", wsHandler)
+
+	// login api
+	router.POST("/login", handler.LoginHandler)
 
 	// users CRUD api
 	protected.GET("/users", handler.GetUsersHandler)
