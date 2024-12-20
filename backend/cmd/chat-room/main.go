@@ -61,9 +61,9 @@ func main() {
 	router.POST("/login", handler.LoginHandler)
 
 	// users CRUD api
-	protected.GET("/users", handler.GetUsersHandler)
-	protected.GET("/users/:id", handler.GetUsersByIdHandler)
-	protected.POST("/users", handler.CreateUserHandler)
+	router.GET("/users", handler.GetUsersHandler)
+	router.GET("/users/:id", handler.GetUsersByIdHandler)
+	router.POST("/users", handler.CreateUserHandler)
 	protected.PATCH("/users/:id", handler.UpdateUserByIdHandler)
 	protected.DELETE("/users/:id", handler.DeleteUserByIdHandler)
 
