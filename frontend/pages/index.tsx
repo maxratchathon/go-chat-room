@@ -9,6 +9,8 @@ import {
   ListItem,
   Divider,
 } from "@mui/material";
+import axios from "axios";
+import { MESSAGE_URL, MOCK_ACCESS_TOKEN } from "@/api";
 
 export default function Home() {
   const mockMessages = [
@@ -29,6 +31,19 @@ export default function Home() {
       setMessageInput("");
     }
   };
+
+  axios
+    .get(MESSAGE_URL, {
+      headers: {
+        Authorization: MOCK_ACCESS_TOKEN,
+      },
+    })
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
 
   return (
     <Box
