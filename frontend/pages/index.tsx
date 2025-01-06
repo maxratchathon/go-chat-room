@@ -1,47 +1,118 @@
-import { useState } from 'react';
-import { useWebSocket } from '../src/components/WebSocketProvider';
+import { useState } from "react";
+import {
+  Box,
+  TextField,
+  Button,
+  Typography,
+  Paper,
+  List,
+  ListItem,
+  Divider,
+} from "@mui/material";
 
 export default function Home() {
-  const { messages, sendMessage } = useWebSocket();
-  const [messageInput, setMessageInput] = useState('');
+  const mockMessages = [
+    { username: "Alice", message: "Hey there!" },
+    { username: "Bob", message: "Hi Alice, how are you?" },
+    { username: "Alice", message: "I'm good, just trying out this chat app." },
+    { username: "Charlie", message: "Hello everyone!" },
+  ];
+
+  const [messages, setMessages] = useState(mockMessages);
+  const [messageInput, setMessageInput] = useState("");
+  const [username, setUsername] = useState("You");
 
   const handleSendMessage = () => {
     if (messageInput.trim()) {
-      sendMessage(messageInput);
-      setMessageInput('');
+      const newMessage = { username, message: messageInput };
+      setMessages((prev) => [...prev, newMessage]);
+      setMessageInput("");
     }
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <h1 className="text-4xl font-bold mb-6">Go Chat Room</h1>
-        
-        <div className="message-container bg-gray-100 w-full p-4 rounded-lg h-96 overflow-y-auto">
-          {messages.map((msg, index) => (
-            <div key={index} className="message mb-2 p-2 bg-white rounded">
-              {msg}
-            </div>
-          ))}
-        </div>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "space-between",
+        minHeight: "100vh",
+        p: 4,
+      }}
+    >
+      <Box
+        sx={{
+          width: "100%",
+          maxWidth: "800px",
+          textAlign: "center",
+        }}
+      >
+        <Typography variant="h4" fontWeight="bold" gutterBottom>
+          Go Chat Room
+        </Typography>
+        <Paper
+          elevation={3}
+          sx={{
+            width: "100%",
+            p: 2,
+            maxHeight: "400px",
+            overflowY: "auto",
+            backgroundColor: "#f5f5f5",
+            mb: 2,
+          }}
+        >
+          <List>
+            {messages.map((msg, index) => (
+              <div key={index}>
+                <ListItem
+                  sx={{
+                    p: 1,
+                    mb: 1,
+                    backgroundColor: "white",
+                    borderRadius: "8px",
+                  }}
+                >
+                  <Typography
+                    variant="subtitle2"
+                    sx={{ fontWeight: "bold", color: "blue" }}
+                  >
+                    {msg.username}:
+                  </Typography>
+                  <Typography variant="body2" sx={{ ml: 1 }}>
+                    {msg.message}
+                  </Typography>
+                </ListItem>
+                {index < messages.length - 1 && <Divider />}
+              </div>
+            ))}
+          </List>
+        </Paper>
 
-        <div className="input-container mt-4 flex">
-          <input 
-            type="text"
+        <Box
+          sx={{
+            display: "flex",
+            gap: 1,
+          }}
+        >
+          <TextField
+            fullWidth
             value={messageInput}
             onChange={(e) => setMessageInput(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-            className="flex-grow p-2 border rounded-l"
+            onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
             placeholder="Type a message..."
+            variant="outlined"
+            size="small"
           />
-          <button 
+          <Button
+            variant="contained"
+            color="primary"
             onClick={handleSendMessage}
-            className="bg-blue-500 text-white p-2 rounded-r"
           >
             Send
-          </button>
-        </div>
-      </div>
-    </main>
+          </Button>
+        </Box>
+      </Box>
+    </Box>
   );
 }
