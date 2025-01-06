@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 )
@@ -51,6 +52,14 @@ func wsHandler(c *gin.Context) {
 func main() {
 	// Initialize Gin router
 	router := gin.Default()
+
+	router.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:3000"}, // Frontend URL
+		AllowMethods:     []string{"GET", "POST", "PATCH", "DELETE"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+	}))
 
 	protected := router.Group("/", controllers.AuthorizationMiddleware)
 

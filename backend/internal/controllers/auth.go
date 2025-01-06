@@ -22,7 +22,7 @@ func CheckHashedPassword(password, hash string) bool {
 
 func ValidateToken(token string) error {
 
-	if token != " ACCESS_TOKEN" {
+	if strings.TrimSpace(token) != "ACCESS_TOKEN" {
 		log.Printf("aceess token was invalid")
 		return fmt.Errorf("token provided was invalid")
 	}
